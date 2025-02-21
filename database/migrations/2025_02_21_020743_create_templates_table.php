@@ -9,11 +9,11 @@ class CreateTemplatesTable extends Migration {
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('desc');
-            $table->string('file');
-            $table->string('type');
-            $table->integer('price');
-            $table->boolean('flag_active');
+            $table->text('description');
+            $table->enum('type', ['free', 'premium']);
+            $table->string('file_path');
+            $table->decimal('price', 10, 2)->default(0);
+            $table->boolean('flag_active')->default(true);
             $table->timestamps();
         });
     }

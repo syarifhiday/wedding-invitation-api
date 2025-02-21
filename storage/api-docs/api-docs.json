@@ -111,11 +111,98 @@
                 "tags": [
                     "Templates"
                 ],
-                "summary": "Get list of templates",
+                "summary": "Get paginated templates",
                 "operationId": "515609062277ac1c04c633b7e0bad17e",
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "List of templates"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Upload a new template",
+                "operationId": "2d94858dd131018a268de19ec450647a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "type",
+                                    "file"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "free",
+                                            "premium"
+                                        ]
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Template uploaded successfully"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/templates/{id}": {
+            "get": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Get a template by ID",
+                "operationId": "c3970808bc05c3f90fab5309cbfd7ab4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Template details"
+                    },
+                    "404": {
+                        "description": "Template not found"
                     }
                 }
             }
@@ -127,8 +214,7 @@
             "description": "User Authentication Endpoints"
         },
         {
-            "name": "Templates",
-            "description": "Templates"
+            "name": "Templates"
         }
     ]
 }

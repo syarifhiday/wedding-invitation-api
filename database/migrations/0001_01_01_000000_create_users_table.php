@@ -14,6 +14,7 @@ class CreateUsersTable extends Migration {
             $table->string('password');
             $table->string('google_id')->nullable();
             $table->enum('auth_provider', ['email', 'phone', 'google']);
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamps();
         });
     }
