@@ -9,7 +9,7 @@ class Undangan extends Model {
     protected $fillable = ['user_id', 'template_id', 'man_nickname', 'woman_nickname'];
 
     public function template() {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(Template::class, 'template_id');
     }
 
     public function user() {

@@ -8,8 +8,9 @@ class CreateUserTemplatesTable extends Migration {
     public function up() {
         Schema::create('user_templates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('template_id')->constrained('templates')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('template_id');
+            $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
             $table->timestamps();
         });
     }

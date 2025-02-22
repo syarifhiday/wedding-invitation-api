@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateTemplatesTable extends Migration {
     public function up() {
         Schema::create('templates', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->text('description');
             $table->enum('type', ['free', 'premium']);

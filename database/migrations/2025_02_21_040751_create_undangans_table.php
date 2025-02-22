@@ -9,7 +9,8 @@ class CreateUndangansTable extends Migration {
         Schema::create('undangan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('template_id')->constrained('templates');
+            $table->uuid('template_id');
+            $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
             $table->string('man_nickname');
             $table->string('woman_nickname');
             $table->timestamps();

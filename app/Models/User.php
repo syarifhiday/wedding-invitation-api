@@ -14,5 +14,10 @@ class User extends Authenticatable
     protected $fillable = ['name', 'email', 'phone_number', 'password', 'google_id', 'auth_provider'];
 
     protected $hidden = ['password', 'remember_token'];
+
+    public function templates() {
+        return $this->belongsToMany(Template::class, 'user_templates', 'user_id', 'template_id');
+    }
+
 }
 
