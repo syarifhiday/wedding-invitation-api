@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Acara extends Model {
+class Bank extends Model
+{
     use HasFactory;
-    protected $table = 'acara';
-    protected $fillable = ['undangan_id', 'title', 'desc', 'date', 'icon'];
+    protected $table = 'bank';
+    protected $fillable = ['id', 'name', 'image', 'flag_active'];
 }

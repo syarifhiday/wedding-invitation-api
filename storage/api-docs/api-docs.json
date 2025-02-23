@@ -5,6 +5,225 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/acara": {
+            "post": {
+                "tags": [
+                    "Acara"
+                ],
+                "summary": "Create a new event",
+                "operationId": "51f4d8b0d96efd61505b94b7bdb6f88f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "title",
+                                    "desc",
+                                    "date",
+                                    "icon"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Wedding Invitation"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "2023-08-15"
+                                    },
+                                    "icon": {
+                                        "type": "string",
+                                        "example": "https://example.com/icon.png"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Event created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{undangan_id}/acara": {
+            "get": {
+                "tags": [
+                    "Acara"
+                ],
+                "summary": "Get events by undangan ID",
+                "operationId": "1923bf14480409fb45f157c1adc88081",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of events"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/acara/{id}": {
+            "put": {
+                "tags": [
+                    "Acara"
+                ],
+                "summary": "Update an event",
+                "operationId": "768729b08e43c4368a075a47aacab3ff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "title",
+                                    "desc",
+                                    "date",
+                                    "icon"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Wedding Invitation"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Elegant wedding invitation template"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "2023-08-15"
+                                    },
+                                    "icon": {
+                                        "type": "string",
+                                        "example": "https://example.com/icon.png"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Event updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Acara"
+                ],
+                "summary": "Delete an event",
+                "operationId": "7a7d269c142f125bdbd2eda31b385d4d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [
@@ -106,6 +325,540 @@
                 ]
             }
         },
+        "/api/banks": {
+            "get": {
+                "tags": [
+                    "Banks"
+                ],
+                "summary": "Get all bank options",
+                "operationId": "caa138ee4cdf9701a3ec3c3198e9f777",
+                "responses": {
+                    "200": {
+                        "description": "List of bank options",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "bank": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Bank BCA"
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "example": "path/to/image.jpg"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Banks"
+                ],
+                "summary": "Create a new bank option",
+                "operationId": "3fa927bf23da99bcc82d71249de2c6d5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Bank BCA"
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Bank option created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "bank": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Bank BCA"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "path/to/image.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/banks/{id}": {
+            "post": {
+                "tags": [
+                    "Banks"
+                ],
+                "summary": "Update a bank option",
+                "operationId": "5bfde53cdc404222b55075fe5ce50a3a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the bank option to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Bank BCA"
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "flag_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Bank option updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "bank": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Bank BCA"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "path/to/image.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Banks"
+                ],
+                "summary": "Delete a bank option",
+                "operationId": "1d9b38766f91542fa4f80fd63eda5f68",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the bank option to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Bank option deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bank deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/galery": {
+            "post": {
+                "tags": [
+                    "Galery"
+                ],
+                "summary": "Create a new galery",
+                "operationId": "b856df5c00cdf6e26611e1930e6eee9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Galery created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{undangan_id}/galery": {
+            "get": {
+                "tags": [
+                    "Galery"
+                ],
+                "summary": "Get galery by undangan ID",
+                "operationId": "149ff3600b836c465aea4f81a0ec20b9",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Galery retrieved successfully"
+                    },
+                    "404": {
+                        "description": "No galery found for this invitation"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/galery/{galery}": {
+            "post": {
+                "tags": [
+                    "Galery"
+                ],
+                "summary": "Update an existing galery",
+                "operationId": "985f4e5f1b677dbcd9ae5aab0d481c8f",
+                "parameters": [
+                    {
+                        "name": "galery",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Galery updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/galery/{id}": {
+            "delete": {
+                "tags": [
+                    "Galery"
+                ],
+                "summary": "Delete an existing galery",
+                "operationId": "a3cf3432d4119e1e77dfeccbe8cdd965",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Galery deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/templates": {
             "get": {
                 "tags": [
@@ -138,17 +891,20 @@
                                 ],
                                 "properties": {
                                     "title": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Wedding Invitation"
                                     },
                                     "description": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Elegant wedding invitation template"
                                     },
                                     "type": {
                                         "type": "string",
                                         "enum": [
                                             "free",
                                             "premium"
-                                        ]
+                                        ],
+                                        "example": "premium"
                                     },
                                     "file": {
                                         "type": "string",
@@ -157,7 +913,8 @@
                                     "price": {
                                         "type": "number",
                                         "format": "float",
-                                        "minimum": 0
+                                        "minimum": 0,
+                                        "example": 10.99
                                     }
                                 },
                                 "type": "object"
@@ -169,13 +926,67 @@
                     "201": {
                         "description": "Template uploaded successfully"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "403": {
                         "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 },
                 "security": [
                     {
-                        "sanctum": []
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/save-template": {
+            "post": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Save a template for the authenticated user",
+                "operationId": "1584f7bbf5ae3264227584ec1533726b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "The ID of the template to save",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Template saved successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "409": {
+                        "description": "Template already saved"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -193,7 +1004,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -218,7 +1029,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -235,25 +1046,30 @@
                                 ],
                                 "properties": {
                                     "title": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Updated Template"
                                     },
                                     "description": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Updated description"
                                     },
                                     "type": {
                                         "type": "string",
                                         "enum": [
                                             "free",
                                             "premium"
-                                        ]
+                                        ],
+                                        "example": "free"
                                     },
                                     "price": {
                                         "type": "number",
                                         "format": "float",
-                                        "minimum": 0
+                                        "minimum": 0,
+                                        "example": 0
                                     },
                                     "flag_active": {
-                                        "type": "boolean"
+                                        "type": "boolean",
+                                        "example": true
                                     }
                                 },
                                 "type": "object"
@@ -274,7 +1090,7 @@
                 },
                 "security": [
                     {
-                        "sanctum": []
+                        "bearerAuth": []
                     }
                 ]
             }
@@ -285,30 +1101,488 @@
                     "Templates"
                 ],
                 "summary": "Get templates owned by the authenticated user",
-                "operationId": "1786a8d09f51acdb2a548c13c75197c2",
+                "operationId": "4f5ad80af4bb213c22c476d809780b63",
                 "responses": {
                     "200": {
                         "description": "List of user's templates"
                     },
-                    "403": {
-                        "description": "Unauthorized"
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [
                     {
-                        "sanctum": []
+                        "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/undangan": {
+            "get": {
+                "tags": [
+                    "Undangan"
+                ],
+                "summary": "Get user's undangan",
+                "operationId": "8656f6734ba5e8f50e8c70b3d1df1931",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Undangan"
+                ],
+                "summary": "Create a new undangan",
+                "operationId": "a2467e701dc5980bc947cb149940ee6a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "template_id",
+                                    "man_name",
+                                    "woman_name",
+                                    "man_nickname",
+                                    "woman_nickname"
+                                ],
+                                "properties": {
+                                    "template_id": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "man_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "woman_name": {
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "man_nickname": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "woman_nickname": {
+                                        "type": "string",
+                                        "example": "Jane"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Undangan created successfully"
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{id}": {
+            "get": {
+                "tags": [
+                    "Undangan"
+                ],
+                "summary": "Get a specific undangan",
+                "operationId": "ed8cb18c1fe0bc998911ddd18abc2332",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the undangan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Undangan not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Undangan"
+                ],
+                "summary": "Update a specific undangan",
+                "operationId": "1f347c378b24b70586b4a1a05daf7803",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the undangan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "man_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "woman_name": {
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "man_nickname": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "woman_nickname": {
+                                        "type": "string",
+                                        "example": "Jane"
+                                    },
+                                    "man_address": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "woman_address": {
+                                        "type": "string",
+                                        "example": "456 Elm St"
+                                    },
+                                    "man_father": {
+                                        "type": "string",
+                                        "example": "Dad"
+                                    },
+                                    "man_mother": {
+                                        "type": "string",
+                                        "example": "Mom"
+                                    },
+                                    "woman_father": {
+                                        "type": "string",
+                                        "example": "Dad"
+                                    },
+                                    "woman_mother": {
+                                        "type": "string",
+                                        "example": "Mom"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Undangan updated successfully"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Undangan not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Undangan"
+                ],
+                "summary": "Delete an undangan",
+                "operationId": "cba59d5b7821db60a03d6798e6079c74",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the undangan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Undangan deleted successfully"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Undangan not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
     "tags": [
         {
+            "name": "Acara",
+            "description": "API endpoints for managing events"
+        },
+        {
             "name": "Authentication",
             "description": "User Authentication Endpoints"
         },
         {
-            "name": "Templates"
+            "name": "Banks",
+            "description": "API endpoints for managing bank options"
+        },
+        {
+            "name": "Galery",
+            "description": "API endpoints for managing galery"
+        },
+        {
+            "name": "Templates",
+            "description": "API endpoints for managing templates"
+        },
+        {
+            "name": "Undangan",
+            "description": "API endpoints for managing undangan"
         }
     ]
 }

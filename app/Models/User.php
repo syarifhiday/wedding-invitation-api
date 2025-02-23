@@ -19,5 +19,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Template::class, 'user_templates', 'user_id', 'template_id');
     }
 
+    public function undangan() {
+        return $this->hasMany(Undangan::class);
+    }
+
 }
 

@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rekening extends Model {
     use HasFactory;
+    protected $table = 'rekening';
     protected $fillable = ['undangan_id', 'account_name', 'account_number', 'bank'];
 }

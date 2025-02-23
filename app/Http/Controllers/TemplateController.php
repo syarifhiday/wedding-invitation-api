@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @OA\Tag(name="Templates")
+ * @OA\Tag(name="Templates", description="API endpoints for managing templates")
  */
 class TemplateController extends Controller {
     /**
      * @OA\Post(
      *     path="/api/templates",
      *     summary="Upload a new template",
-     *     security={{"sanctum":{}}},
+     *     security={{"bearerAuth":{}}},
      *     tags={"Templates"},
      *     @OA\RequestBody(
      *         required=true,
@@ -26,16 +26,18 @@ class TemplateController extends Controller {
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 required={"title", "description", "type", "file"},
-     *                 @OA\Property(property="title", type="string"),
-     *                 @OA\Property(property="description", type="string"),
-     *                 @OA\Property(property="type", type="string", enum={"free", "premium"}),
+     *                 @OA\Property(property="title", type="string", example="Wedding Invitation"),
+     *                 @OA\Property(property="description", type="string", example="Elegant wedding invitation template"),
+     *                 @OA\Property(property="type", type="string", enum={"free", "premium"}, example="premium"),
      *                 @OA\Property(property="file", type="string", format="binary"),
-     *                 @OA\Property(property="price", type="number", format="float", minimum=0)
+     *                 @OA\Property(property="price", type="number", format="float", minimum=0, example=10.99)
      *             )
      *         )
      *     ),
      *     @OA\Response(response=201, description="Template uploaded successfully"),
-     *     @OA\Response(response=403, description="Unauthorized")
+     *     @OA\Response(response=401, description="Unauthenticated"),
+     *     @OA\Response(response=403, description="Unauthorized"),
+     *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
     public function store(Request $request): JsonResponse {
@@ -91,8 +93,8 @@ class TemplateController extends Controller {
      * @OA\Post(
      *     path="/api/save-template",
      *     summary="Save a template for the authenticated user",
+     *     security={{"bearerAuth":{}}},
      *     tags={"Templates"},
-     *     security={{ "bearerAuth":{} }},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -100,14 +102,7 @@ class TemplateController extends Controller {
      *             @OA\Property(property="id", type="integer", example=1, description="The ID of the template to save")
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Template saved successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Template saved successfully"),
-     *             @OA\Property(property="template", ref="#/components/schemas/UserTemplate")
-     *         )
-     *     ),
+     *     @OA\Response(response=201, description="Template saved successfully"),
      *     @OA\Response(response=401, description="Unauthenticated"),
      *     @OA\Response(response=409, description="Template already saved"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -153,18 +148,18 @@ class TemplateController extends Controller {
      * @OA\Put(
      *     path="/api/templates/{id}",
      *     summary="Update an existing template",
-     *     security={{"sanctum":{}}},
+     *     security={{"bearerAuth":{}}},
      *     tags={"Templates"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             required={"title", "description", "type", "flag_active"},
-     *             @OA\Property(property="title", type="string"),
-     *             @OA\Property(property="description", type="string"),
-     *             @OA\Property(property="type", type="string", enum={"free", "premium"}),
-     *             @OA\Property(property="price", type="number", format="float", minimum=0),
-     *             @OA\Property(property="flag_active", type="boolean")
+     *             @OA\Property(property="title", type="string", example="Updated Template"),
+     *             @OA\Property(property="description", type="string", example="Updated description"),
+     *             @OA\Property(property="type", type="string", enum={"free", "premium"}, example="free"),
+     *             @OA\Property(property="price", type="number", format="float", minimum=0, example=0),
+     *             @OA\Property(property="flag_active", type="boolean", example=true)
      *         )
      *     ),
      *     @OA\Response(response=200, description="Template updated successfully"),
@@ -211,7 +206,7 @@ class TemplateController extends Controller {
      *     path="/api/templates/{id}",
      *     summary="Get a template by ID",
      *     tags={"Templates"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Template details"),
      *     @OA\Response(response=404, description="Template not found")
      * )
@@ -225,20 +220,12 @@ class TemplateController extends Controller {
      * @OA\Get(
      *     path="/api/my-templates",
      *     summary="Get templates owned by the authenticated user",
-     *     security={{"sanctum":{}}},
+     *     security={{"bearerAuth":{}}},
      *     tags={"Templates"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of user's templates",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Template")
-     *         )
-     *     ),
+     *     @OA\Response(response=200, description="List of user's templates"),
      *     @OA\Response(response=401, description="Unauthenticated")
      * )
      */
-
      public function userTemplates(): JsonResponse
     {
         $user = Auth::user();

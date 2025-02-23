@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Story extends Model {
     use HasFactory;
+    protected $table = 'story';
     protected $fillable = ['undangan_id', 'title', 'desc', 'image'];
 }

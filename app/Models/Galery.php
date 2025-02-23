@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Galery extends Model {
     use HasFactory;
+    protected $table = 'galery';
     protected $fillable = ['undangan_id', 'image'];
 }

@@ -4,6 +4,13 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UndanganController;
+use App\Http\Controllers\AcaraController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\GaleryController;
+use App\Http\Controllers\RekeningController;
+use App\Http\Controllers\StoryController;
+use App\Models\Rekening;
+use App\Models\Story;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -31,6 +38,34 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-undangan', [UndanganController::class, 'userUndangan']);
     Route::post('/undangan', [UndanganController::class, 'store']);
 });
+
+
+// UNDANGAN
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('undangan', UndanganController::class);
+    Route::apiResource('acara', AcaraController::class, ['except' => ['index', 'show']]);
+
+    Route::apiResource('story', StoryController::class, ['except' => ['index', 'show', 'update']]);
+    Route::post('story/{story}', [StoryController::class, 'updateStory']);
+    Route::get('undangan/{undangan_id}/story', [StoryController::class, 'getByUndangan']);
+
+    Route::apiResource('rekening', RekeningController::class, ['except' => ['index', 'show']]);
+    Route::get('undangan/{undangan_id}/rekening', [RekeningController::class, 'getByUndangan']);
+
+    Route::apiResource('galery', GaleryController::class, ['except' => ['index', 'show', 'update']]);
+    Route::post('galery/{galery}', [GaleryController::class, 'updateGalery']);
+
+    Route::apiResource('banks', BankController::class, ['except' => ['index', 'show', 'update']]);
+    Route::post('banks/{bank}', [BankController::class, 'updateBank']);
+});
+
+Route::get('/banks', [BankController::class, 'index']);
+Route::get('undangan/{undangan_id}/acara', [AcaraController::class, 'getByUndangan']);
+Route::get('undangan/{undangan_id}/galery', [GaleryController::class, 'getByUndangan']);
+
+
+
+
 
 
 Route::post('/admin/register', [AdminAuthController::class, 'register']);
