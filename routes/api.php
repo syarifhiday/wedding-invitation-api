@@ -47,10 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('story', StoryController::class, ['except' => ['index', 'show', 'update']]);
     Route::post('story/{story}', [StoryController::class, 'updateStory']);
-    Route::get('undangan/{undangan_id}/story', [StoryController::class, 'getByUndangan']);
 
     Route::apiResource('rekening', RekeningController::class, ['except' => ['index', 'show']]);
-    Route::get('undangan/{undangan_id}/rekening', [RekeningController::class, 'getByUndangan']);
 
     Route::apiResource('galery', GaleryController::class, ['except' => ['index', 'show', 'update']]);
     Route::post('galery/{galery}', [GaleryController::class, 'updateGalery']);
@@ -62,6 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/banks', [BankController::class, 'index']);
 Route::get('undangan/{undangan_id}/acara', [AcaraController::class, 'getByUndangan']);
 Route::get('undangan/{undangan_id}/galery', [GaleryController::class, 'getByUndangan']);
+Route::get('undangan/{undangan_id}/rekening', [RekeningController::class, 'getByUndangan']);
+Route::get('undangan/{undangan_id}/story', [StoryController::class, 'getByUndangan']);
 
 
 

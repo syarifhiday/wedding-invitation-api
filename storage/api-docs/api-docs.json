@@ -859,6 +859,397 @@
                 ]
             }
         },
+        "/api/rekening": {
+            "post": {
+                "tags": [
+                    "Rekening"
+                ],
+                "summary": "Create a new rekening",
+                "operationId": "a33de93ef242c0a9e6349907659270c2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "bank": {
+                                        "type": "string",
+                                        "example": "Bank BCA"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rekening created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{undangan_id}/rekening": {
+            "get": {
+                "tags": [
+                    "Rekening"
+                ],
+                "summary": "Get rekening by undangan ID",
+                "operationId": "6e0e5b01ed55c5657a09d8b126f5b3e3",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of rekening"
+                    },
+                    "404": {
+                        "description": "No rekening found for this invitation"
+                    }
+                }
+            }
+        },
+        "/api/rekening/{id}": {
+            "put": {
+                "tags": [
+                    "Rekening"
+                ],
+                "summary": "Update a rekening",
+                "operationId": "9480590691b92bf15d4d5ee7cdae7583",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "bank": {
+                                        "type": "string",
+                                        "example": "Bank BCA"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rekening updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Rekening not found or unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/story": {
+            "post": {
+                "tags": [
+                    "Story"
+                ],
+                "summary": "Create a new story",
+                "operationId": "822fbe08a83a6c65027f1585d9ebb984",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "title",
+                                    "desc",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Wedding Invitation"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Story created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{undangan_id}/story": {
+            "get": {
+                "tags": [
+                    "Story"
+                ],
+                "summary": "Get stories by undangan ID",
+                "operationId": "37f289f2549eab50be74a773f1341345",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "description": "ID of the undangan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of stories"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Undangan not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/story/{id}": {
+            "post": {
+                "tags": [
+                    "Story"
+                ],
+                "summary": "Update a story",
+                "operationId": "f0028183cdd00482681703525593528a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the story",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "undangan_id",
+                                    "title",
+                                    "desc",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "undangan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Wedding Invitation"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Story updated successfully"
+                    },
+                    "404": {
+                        "description": "Story not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Story not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "undangan_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Undangan not found or unauthorized"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/templates": {
             "get": {
                 "tags": [
@@ -1551,6 +1942,24 @@
         }
     },
     "components": {
+        "responses": {
+            "404": {
+                "description": "Undangan not found or unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Undangan not found or unauthorized"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
@@ -1575,6 +1984,14 @@
         {
             "name": "Galery",
             "description": "API endpoints for managing galery"
+        },
+        {
+            "name": "Rekening",
+            "description": "API endpoints for managing rekenings"
+        },
+        {
+            "name": "Story",
+            "description": "API endpoints for managing stories"
         },
         {
             "name": "Templates",
