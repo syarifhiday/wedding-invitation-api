@@ -66,7 +66,8 @@ class TemplateController extends Controller {
             // Simpan file ke public storage
             $file = $request->file('file');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('templates', $fileName, 'public');
+            $filePath = 'storage/templates/' . $fileName;
+            $file->move(storage_path('templates'), $fileName);
 
             Log::info('File stored', ['path' => $filePath]);
 
