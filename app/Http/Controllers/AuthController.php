@@ -80,6 +80,28 @@ class AuthController extends Controller {
         return response()->json(['access_token' => $token, 'token_type' => 'Bearer'], 200);
     }
 
+
+    public function adminLogin(Request $request): JsonResponse {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        $user = Auth::user();
+        $admin = User::where('email', $request->email)->first();
+        //cek apakah email tersebut role nya admin
+        if ($admin->role !== 'admin') {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['access_token' => $token, 'token_type' => 'Bearer'], 200);
+    }
+
     /**
      * @OA\Post(
      *     path="/api/logout",

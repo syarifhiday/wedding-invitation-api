@@ -25,19 +25,51 @@ class TemplateController extends Controller {
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title", "description", "type", "file"},
-     *                 @OA\Property(property="title", type="string", example="Wedding Invitation"),
-     *                 @OA\Property(property="description", type="string", example="Elegant wedding invitation template"),
-     *                 @OA\Property(property="type", type="string", enum={"free", "premium"}, example="premium"),
-     *                 @OA\Property(property="file", type="string", format="binary"),
-     *                 @OA\Property(property="price", type="number", format="float", minimum=0, example=10.99)
+     *                 required={"thumbnail", "title", "description", "type", "file", "price"},
+     *                 @OA\Property(property="thumbnail", type="file", format="binary"),
+     *                 @OA\Property(property="title", type="string", example="Template Title"),
+     *                 @OA\Property(property="description", type="string", example="Template Description"),
+     *                 @OA\Property(property="type", type="string", enum={"free", "premium"}, example="free"),
+     *                 @OA\Property(property="file", type="file", format="binary"),
+     *                 @OA\Property(property="price", type="number", format="float", minimum=0, example=0)
      *             )
      *         )
      *     ),
-     *     @OA\Response(response=201, description="Template uploaded successfully"),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Unauthorized"),
-     *     @OA\Response(response=500, description="Internal Server Error")
+     *     @OA\Response(
+     *         response=201,
+     *         description="Template uploaded successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Template uploaded successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Validation error")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Internal Server Error")
+     *         )
+     *     )
      * )
      */
     public function store(Request $request): JsonResponse {
@@ -54,6 +86,7 @@ class TemplateController extends Controller {
 
 
             $validatedData = $request->validate([
+                'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
                 'type' => 'required|in:free,premium',
@@ -64,6 +97,11 @@ class TemplateController extends Controller {
             Log::info('Validation passed', ['data' => $validatedData]);
 
             // Simpan file ke public storage
+            $thumbnail = $request->file('thumbnail');
+            $thumbnailName = time() . '_' . $thumbnail->getClientOriginalName();
+            $thumbnailPath = 'storage/templates/' . $thumbnailName;
+            $thumbnail->move(storage_path('templates'), $thumbnailName);
+
             $file = $request->file('file');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = 'storage/templates/' . $fileName;
@@ -72,6 +110,7 @@ class TemplateController extends Controller {
             Log::info('File stored', ['path' => $filePath]);
 
             $template = Template::create([
+                'thumbnail' => $thumbnailPath,
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'type' => $validatedData['type'],
@@ -192,13 +231,23 @@ class TemplateController extends Controller {
     /**
      * @OA\Get(
      *     path="/api/templates",
-     *     summary="Get paginated templates",
+     *     summary="Get all templates",
      *     tags={"Templates"},
-     *     @OA\Response(response=200, description="List of templates")
+     *     @OA\Response(response=200, description="List of templates"),
+     *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
     public function index(Request $request): JsonResponse {
-        $templates = Template::paginate(10);
+        $templates = Template::where('flag_active', true)->paginate(10);
+        return response()->json($templates);
+    }
+
+    public function getAllTemplates(): JsonResponse {
+        $admin = Auth::user();
+        if ($admin->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        $templates = Template::all();
         return response()->json($templates);
     }
 
@@ -213,7 +262,7 @@ class TemplateController extends Controller {
      * )
      */
     public function show($id): JsonResponse {
-        $template = Template::findOrFail($id);
+        $template = Template::where('id', $id)->where('flag_active', true)->firstOrFail();
         return response()->json($template);
     }
 
@@ -234,7 +283,7 @@ class TemplateController extends Controller {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        $templates = $user->templates; // Pastikan relasi sudah benar di Model User
+        $templates = $user->templates->where('flag_active', true); // Pastikan relasi sudah benar di Model User
 
         return response()->json([
             'status' => 'success',

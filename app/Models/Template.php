@@ -11,7 +11,7 @@ class Template extends Model {
     protected $keyType = 'string';
     public $incrementing = false;
     protected $fillable = [
-        'id', 'title', 'description', 'type', 'file_path', 'price', 'flag_active'
+        'id', 'title', 'description', 'thumbnail', 'type', 'file_path', 'price', 'flag_active'
     ];
 
     protected static function boot() {

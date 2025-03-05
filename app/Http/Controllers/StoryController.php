@@ -30,39 +30,77 @@ class StoryController extends Controller {
 
     /**
      * @OA\Post(
-     *     path="/api/story",
+     *     path="/api/undangan/{undangan_id}/story",
      *     summary="Create a new story",
      *     tags={"Story"},
-     *     security={{"bearerAuth":{}}},
+     *     security={{ "bearer": {} }},
+     *     @OA\Parameter(name="undangan_id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"undangan_id", "title", "desc", "image"},
-     *                 @OA\Property(property="undangan_id", type="integer", example=1),
-     *                 @OA\Property(property="title", type="string", example="Wedding Invitation"),
-     *                 @OA\Property(property="desc", type="string", example="Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
+     *                 required={"title", "desc", "image"},
+     *                 @OA\Property(property="title", type="string", example="Wedding Story"),
+     *                 @OA\Property(property="desc", type="string", example="This is a wedding story"),
      *                 @OA\Property(property="image", type="file", format="binary")
      *             )
      *         )
      *     ),
-     *     @OA\Response(response=201, description="Story created successfully"),
-     *     @OA\Response(response=401, description="Unauthenticated"),
-     *     @OA\Response(response=403, description="Unauthorized"),
-     *     @OA\Response(response=404, description="Undangan not found or unauthorized"),
-     *     @OA\Response(response=500, description="Internal Server Error")
+     *     @OA\Response(
+     *         response=201,
+     *         description="Story created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Undangan not found or unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Undangan not found or unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Validation error")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Internal Server Error")
+     *         )
+     *     )
      * )
      */
-    public function store(Request $request) {
+    public function store(Request $request, $undangan_id) {
         $user = Auth::user(); // Ambil user yang sedang login
 
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
+        $undangan = Undangan::where('id', $undangan_id)->where('user_id', $user->id)->first();
+        if (!$undangan) {
+            return response()->json(['message' => 'Undangan not found or unauthorized'], 404);
+        }
+
         $validated = $request->validate([
-            'undangan_id' => 'required|exists:undangan,id',
             'title' => 'required|string',
             'desc' => 'required|string',
             'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp|max:2048'
@@ -73,15 +111,13 @@ class StoryController extends Controller {
         $filename = time() . '.' . $file->getClientOriginalExtension();
         $filePath = $file->storeAs('images', $filename, 'public');
 
-        $validated['image'] = $filePath;
+        $story = Story::create([
+            'undangan_id' => $undangan_id,
+            'title' => $validated['title'],
+            'desc' => $validated['desc'],
+            'image' => $filePath
+        ]);
 
-        $undangan = Undangan::where('id', $validated['undangan_id'])->where('user_id', $user->id)->first();
-
-        if (!$undangan) {
-            return response()->json(['message' => 'Undangan not found or unauthorized'], 404);
-        }
-
-        $story = Story::create($validated);
         return response()->json($story, 201);
     }
 
@@ -90,16 +126,10 @@ class StoryController extends Controller {
      *     path="/api/undangan/{undangan_id}/story",
      *     summary="Get stories by undangan ID",
      *     tags={"Story"},
-     *     @OA\Parameter(
-     *         name="undangan_id",
-     *         in="path",
-     *         required=true,
-     *         description="ID of the undangan",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="undangan_id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(
      *         response=200,
-     *         description="List of stories"
+     *         description="Success"
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -116,22 +146,8 @@ class StoryController extends Controller {
      *         )
      *     )
      * )
-     *
-     * @OA\Response(
-     *     response=404,
-     *     description="Undangan not found or unauthorized",
-     *     @OA\JsonContent(
-     *         @OA\Property(property="message", type="string", example="Undangan not found or unauthorized")
-     *     )
-     * )
      */
     public function getByUndangan($undangan_id) {
-        $user = Auth::user();
-        $undangan = Undangan::where('id', $undangan_id)->where('user_id', $user->id)->first();
-
-        if (!$undangan) {
-            return response()->json(['message' => 'Undangan not found or unauthorized'], 404);
-        }
 
         $story = Story::where('undangan_id', $undangan_id)->get();
 
@@ -144,26 +160,19 @@ class StoryController extends Controller {
 
     /**
      * @OA\Post(
-     *     path="/api/story/{id}",
+     *     path="/api/undangan/{undangan_id}/story/{story_id}",
      *     summary="Update a story",
      *     tags={"Story"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID of the story",
-     *         @OA\Schema(type="integer")
-     *     ),
+     *     @OA\Parameter(name="undangan_id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="story_id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"undangan_id", "title", "desc", "image"},
-     *                 @OA\Property(property="undangan_id", type="integer", example=1),
-     *                 @OA\Property(property="title", type="string", example="Wedding Invitation"),
-     *                 @OA\Property(property="desc", type="string", example="Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
+     *                 required={"title", "desc", "image"},
+     *                 @OA\Property(property="title", type="string", example="Wedding Story"),
+     *                 @OA\Property(property="desc", type="string", example="This is a wedding story"),
      *                 @OA\Property(property="image", type="file", format="binary")
      *             )
      *         )
@@ -173,6 +182,13 @@ class StoryController extends Controller {
      *         description="Story updated successfully"
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Validation error")
+     *         )
+     *     ),
+     *     @OA\Response(
      *         response=404,
      *         description="Story not found or unauthorized",
      *         @OA\JsonContent(
@@ -180,37 +196,23 @@ class StoryController extends Controller {
      *         )
      *     ),
      *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
+     *         response=500,
+     *         description="Internal Server Error",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Unauthenticated")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Validation error"),
-     *             @OA\Property(property="errors", type="object", @OA\Property(property="undangan_id", type="array", @OA\Items(type="string", example="Undangan not found or unauthorized")))
+     *             @OA\Property(property="message", type="string", example="Internal Server Error")
      *         )
      *     )
      * )
      */
-    public function updateStory(Request $request, Story $story) {
+    public function updateStory(Request $request, $undangan_id, Story $story) {
         $user = Auth::user(); // Ambil user yang sedang login
 
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        $validated = $request->validate([
-            'undangan_id' => 'required|exists:undangan,id',
-            'title' => 'sometimes|string',
-            'desc' => 'sometimes|string',
-            'image' => 'sometimes|file|mimes:jpeg,png,jpg,gif,webp|max:2048'
-        ]);
-
-        $undangan = Undangan::where('id', $validated['undangan_id'])->where('user_id', $user->id)->first();
+        // Pastikan undangan ada dan milik user yang sedang login
+        $undangan = Undangan::where('id', $undangan_id)->where('user_id', $user->id)->first();
         if (!$undangan) {
             return response()->json(['message' => 'Undangan not found or unauthorized'], 404);
         }
@@ -220,6 +222,13 @@ class StoryController extends Controller {
             return response()->json(['message' => 'Story not found or unauthorized'], 404);
         }
 
+        // Validasi request
+        $validated = $request->validate([
+            'title' => 'sometimes|string',
+            'desc' => 'sometimes|string',
+            'image' => 'sometimes|file|mimes:jpeg,png,jpg,gif,webp|max:2048'
+        ]);
+
         // Simpan gambar hanya jika ada file baru
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -228,12 +237,62 @@ class StoryController extends Controller {
             $validated['image'] = $filePath;
         }
 
+        // Update hanya field yang dikirim dalam request
         $story->update($validated);
-        return response()->json($story);
+
+        return response()->json([
+            'message' => 'Story updated successfully',
+            'story' => $story
+        ]);
     }
 
 
-    public function destroy(Story $story) {
+    /**
+     * @OA\Delete(
+     *     path="/api/undangan/{undangan_id}/story/{story_id}",
+     *     summary="Delete a story",
+     *     tags={"Story"},
+     *     @OA\Parameter(name="undangan_id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="story_id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Story deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Deleted successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Story not found or unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Story not found or unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Internal Server Error")
+     *         )
+     *     )
+     * )
+     */
+    public function destroy($undangan_id, Story $story) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $undangan = Undangan::where('id', $undangan_id)->where('user_id', $user->id)->first();
+        if (!$undangan) {
+            return response()->json(['message' => 'Undangan not found or unauthorized'], 404);
+        }
+
+        if ($story->undangan_id !== $undangan->id) {
+            return response()->json(['message' => 'Story not found or unauthorized'], 404);
+        }
+
         $story->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }

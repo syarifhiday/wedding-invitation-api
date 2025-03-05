@@ -5,37 +5,70 @@
         "version": "1.0"
     },
     "paths": {
-        "/api/acara": {
+        "/api/undangan/{undangan_id}/acara": {
+            "get": {
+                "tags": [
+                    "Acara"
+                ],
+                "summary": "Get events by undangan ID",
+                "operationId": "1923bf14480409fb45f157c1adc88081",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of events"
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Acara"
                 ],
                 "summary": "Create a new event",
-                "operationId": "51f4d8b0d96efd61505b94b7bdb6f88f",
+                "operationId": "3cd755b9381277a8f08ee505148a08a3",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "undangan_id",
                                     "title",
                                     "desc",
                                     "date",
                                     "icon"
                                 ],
                                 "properties": {
-                                    "undangan_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "title": {
                                         "type": "string",
                                         "example": "Wedding Invitation"
                                     },
                                     "desc": {
                                         "type": "string",
-                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                        "example": "Lorem ipsum dolor sit amet."
                                     },
                                     "date": {
                                         "type": "string",
@@ -75,13 +108,13 @@
                 ]
             }
         },
-        "/api/undangan/{undangan_id}/acara": {
-            "get": {
+        "/api/undangan/{undangan_id}/acara/{id}": {
+            "put": {
                 "tags": [
                     "Acara"
                 ],
-                "summary": "Get events by undangan ID",
-                "operationId": "1923bf14480409fb45f157c1adc88081",
+                "summary": "Update an event",
+                "operationId": "2a4643dc0726833b5fef65ee32ee5d2c",
                 "parameters": [
                     {
                         "name": "undangan_id",
@@ -90,29 +123,7 @@
                         "schema": {
                             "type": "integer"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of events"
                     },
-                    "404": {
-                        "description": "Undangan not found or unauthorized"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/api/acara/{id}": {
-            "put": {
-                "tags": [
-                    "Acara"
-                ],
-                "summary": "Update an event",
-                "operationId": "768729b08e43c4368a075a47aacab3ff",
-                "parameters": [
                     {
                         "name": "id",
                         "in": "path",
@@ -128,17 +139,12 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "undangan_id",
                                     "title",
                                     "desc",
                                     "date",
                                     "icon"
                                 ],
                                 "properties": {
-                                    "undangan_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "title": {
                                         "type": "string",
                                         "example": "Wedding Invitation"
@@ -172,7 +178,7 @@
                         "description": "Unauthorized"
                     },
                     "404": {
-                        "description": "Undangan not found or unauthorized"
+                        "description": "Acara not found or unauthorized"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -189,8 +195,16 @@
                     "Acara"
                 ],
                 "summary": "Delete an event",
-                "operationId": "7a7d269c142f125bdbd2eda31b385d4d",
+                "operationId": "0889a8fa07e97ebcfd477ceedcd88147",
                 "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -211,7 +225,7 @@
                         "description": "Unauthorized"
                     },
                     "404": {
-                        "description": "Undangan not found or unauthorized"
+                        "description": "Acara not found or unauthorized"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -1004,71 +1018,6 @@
                 ]
             }
         },
-        "/api/story": {
-            "post": {
-                "tags": [
-                    "Story"
-                ],
-                "summary": "Create a new story",
-                "operationId": "822fbe08a83a6c65027f1585d9ebb984",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "undangan_id",
-                                    "title",
-                                    "desc",
-                                    "image"
-                                ],
-                                "properties": {
-                                    "undangan_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "title": {
-                                        "type": "string",
-                                        "example": "Wedding Invitation"
-                                    },
-                                    "desc": {
-                                        "type": "string",
-                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                                    },
-                                    "image": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Story created successfully"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Undangan not found or unauthorized"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/undangan/{undangan_id}/story": {
             "get": {
                 "tags": [
@@ -1080,7 +1029,6 @@
                     {
                         "name": "undangan_id",
                         "in": "path",
-                        "description": "ID of the undangan",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1089,7 +1037,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of stories"
+                        "description": "Success"
                     },
                     "404": {
                         "description": "Undangan not found or unauthorized",
@@ -1124,20 +1072,17 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/story/{id}": {
+            },
             "post": {
                 "tags": [
                     "Story"
                 ],
-                "summary": "Update a story",
-                "operationId": "f0028183cdd00482681703525593528a",
+                "summary": "Create a new story",
+                "operationId": "9185d72475068438ae5225f431880658",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "undangan_id",
                         "in": "path",
-                        "description": "ID of the story",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1150,23 +1095,164 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "undangan_id",
                                     "title",
                                     "desc",
                                     "image"
                                 ],
                                 "properties": {
-                                    "undangan_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "title": {
                                         "type": "string",
-                                        "example": "Wedding Invitation"
+                                        "example": "Wedding Story"
                                     },
                                     "desc": {
                                         "type": "string",
-                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                        "example": "This is a wedding story"
+                                    },
+                                    "image": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Story created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Undangan not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Undangan not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/undangan/{undangan_id}/story/{story_id}": {
+            "post": {
+                "tags": [
+                    "Story"
+                ],
+                "summary": "Update a story",
+                "operationId": "b0d1a9c95820d4fbd82b8e730747f4f7",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "story_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "desc",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Wedding Story"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "This is a wedding story"
                                     },
                                     "image": {
                                         "type": "file",
@@ -1182,6 +1268,22 @@
                     "200": {
                         "description": "Story updated successfully"
                     },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Story not found or unauthorized",
                         "content": {
@@ -1191,6 +1293,189 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Story not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Story"
+                ],
+                "summary": "Delete a story",
+                "operationId": "7b9cf1b1a9306945f556b3d36cf229d8",
+                "parameters": [
+                    {
+                        "name": "undangan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "story_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Story deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Story not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Story not found or unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/templates": {
+            "get": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Get all templates",
+                "operationId": "515609062277ac1c04c633b7e0bad17e",
+                "responses": {
+                    "200": {
+                        "description": "List of templates"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Upload a new template",
+                "operationId": "2d94858dd131018a268de19ec450647a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "thumbnail",
+                                    "title",
+                                    "description",
+                                    "type",
+                                    "file",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "thumbnail": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Template Title"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Template Description"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "free",
+                                            "premium"
+                                        ],
+                                        "example": "free"
+                                    },
+                                    "file": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "minimum": 0,
+                                        "example": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Template uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Template uploaded successfully"
                                         }
                                     },
                                     "type": "object"
@@ -1214,7 +1499,23 @@
                             }
                         }
                     },
-                    "422": {
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
                         "description": "Validation error",
                         "content": {
                             "application/json": {
@@ -1223,108 +1524,28 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Validation error"
-                                        },
-                                        "errors": {
-                                            "properties": {
-                                                "undangan_id": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string",
-                                                        "example": "Undangan not found or unauthorized"
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/templates": {
-            "get": {
-                "tags": [
-                    "Templates"
-                ],
-                "summary": "Get paginated templates",
-                "operationId": "515609062277ac1c04c633b7e0bad17e",
-                "responses": {
-                    "200": {
-                        "description": "List of templates"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Templates"
-                ],
-                "summary": "Upload a new template",
-                "operationId": "2d94858dd131018a268de19ec450647a",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "title",
-                                    "description",
-                                    "type",
-                                    "file"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "Wedding Invitation"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Elegant wedding invitation template"
-                                    },
-                                    "type": {
-                                        "type": "string",
-                                        "enum": [
-                                            "free",
-                                            "premium"
-                                        ],
-                                        "example": "premium"
-                                    },
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "minimum": 0,
-                                        "example": 10.99
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Template uploaded successfully"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Unauthorized"
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1942,24 +2163,6 @@
         }
     },
     "components": {
-        "responses": {
-            "404": {
-                "description": "Undangan not found or unauthorized",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Undangan not found or unauthorized"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
